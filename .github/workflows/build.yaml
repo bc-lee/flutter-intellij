@@ -3,6 +3,8 @@ name: Build
 on:
   push:
     branches: [ build-my-own-plugin ]
+  pull_request:
+    branches: [ build-my-own-plugin ]
   workflow_dispatch:
 
 jobs:
@@ -32,21 +34,15 @@ jobs:
           cd tool/plugin
           dart pub get
 
-      - name: Modify product-matrix.json to include only 2024.1
-        run: |
-          set -xe
-          jq '.list |= map(select(.name == "2024.1"))' product-matrix.json > product-matrix.json.tmp
-          mv product-matrix.json.tmp product-matrix.json
-
       - name: Build plugin
         run: |
           set -xe
-          bin/plugin make
+          third_party/gradlew buildPlugin
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
           name: flutter-intellij
-          path: releases/**/flutter-intellij.zip
+          path: build/**/flutter-*.zip
           retention-days: 7
           compression-level: 0  # It's already compressed

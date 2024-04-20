@@ -75,7 +75,7 @@ intellij {
   instrumentCode.set(true)
   updateSinceUntilBuild.set(false)
   version.set(ideVersion)
-  downloadSources.set(false)
+  downloadSources.set(true)
   val pluginList = mutableListOf(
     project(":flutter-idea"), "java", "properties",
     "junit", "Git4Idea", "Kotlin", "gradle",
