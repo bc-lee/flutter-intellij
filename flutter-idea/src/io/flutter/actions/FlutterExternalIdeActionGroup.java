@@ -5,6 +5,7 @@
  */
 package io.flutter.actions;
 
+import com.intellij.openapi.actionSystem.ActionUpdateThread;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.CommonDataKeys;
 import com.intellij.openapi.actionSystem.DefaultActionGroup;
@@ -84,5 +85,10 @@ public class FlutterExternalIdeActionGroup extends DefaultActionGroup {
     final boolean enabled = isExternalIdeFile(event);
     presentation.setEnabled(enabled);
     presentation.setVisible(enabled);
+  }
+
+  @Override
+  public @NotNull ActionUpdateThread getActionUpdateThread() {
+    return ActionUpdateThread.BGT;
   }
 }

@@ -5,6 +5,7 @@
  */
 package io.flutter.actions;
 
+import com.intellij.openapi.actionSystem.ActionUpdateThread;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.CommonDataKeys;
 import com.intellij.openapi.actionSystem.DefaultActionGroup;
@@ -28,5 +29,10 @@ public class FlutterPackagesExplorerActionGroup extends DefaultActionGroup {
     final Presentation presentation = e.getPresentation();
     presentation.setEnabled(enabled);
     presentation.setVisible(enabled);
+  }
+
+  @Override
+  public @NotNull ActionUpdateThread getActionUpdateThread() {
+    return ActionUpdateThread.BGT;
   }
 }
