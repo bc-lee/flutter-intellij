@@ -1,8 +1,9 @@
 // Copyright 2000-2021 JetBrains s.r.o. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
+// See https://github.com/JetBrains/android/commit/bc04d908d607f866461712d69335e5d92fd2661e for the original source code
 package org.jetbrains.android.facet;
 
 import com.android.SdkConstants;
-import com.android.tools.idea.gradle.project.Info;
+import com.android.tools.idea.gradle.project.GradleProjectInfo;
 import com.intellij.facet.FacetType;
 import com.intellij.framework.detection.DetectedFrameworkDescription;
 import com.intellij.framework.detection.FacetBasedFrameworkDetector;
@@ -39,7 +40,7 @@ public class AndroidFrameworkDetector extends FacetBasedFrameworkDetector<Androi
                                                              @NotNull FrameworkDetectionContext context) {
     Project project = context.getProject();
     if (project != null) {
-      Info gradleProjectInfo = Info.getInstance(project);
+      GradleProjectInfo gradleProjectInfo = GradleProjectInfo.getInstance(project);
       // See https://code.google.com/p/android/issues/detail?id=203384
       // Since this method is invoked before sync, 'isBuildWithGradle' may return false even for Gradle projects. If that happens, we fall
       // back to checking that a project has a suitable Gradle file at its toplevel.
@@ -67,7 +68,7 @@ public class AndroidFrameworkDetector extends FacetBasedFrameworkDetector<Androi
       protected void hyperlinkActivated(@NotNull Notification notification, @NotNull HyperlinkEvent event) {
         notification.expire();
         ShowSettingsUtil.getInstance().showSettingsDialog(
-          project, AndroidBundle.message("android.dex.compiler.configurable.display.name"));
+          project, "Android Compilers");
       }
     });
     notification.notify(project);
