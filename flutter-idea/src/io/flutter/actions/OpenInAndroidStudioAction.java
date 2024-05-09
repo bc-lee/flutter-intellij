@@ -10,10 +10,7 @@ import com.intellij.execution.configurations.GeneralCommandLine;
 import com.intellij.execution.process.ColoredProcessHandler;
 import com.intellij.execution.process.ProcessAdapter;
 import com.intellij.execution.process.ProcessEvent;
-import com.intellij.openapi.actionSystem.AnAction;
-import com.intellij.openapi.actionSystem.AnActionEvent;
-import com.intellij.openapi.actionSystem.CommonDataKeys;
-import com.intellij.openapi.actionSystem.Presentation;
+import com.intellij.openapi.actionSystem.*;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.editor.CaretModel;
@@ -36,6 +33,11 @@ import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 
+/**
+ * This action has been removed from the plugin.xml as a required dependent method call {GradleProjectImporter.importAndOpenProjectCore()
+ * throws "configureNewProject should be used with new projects only".
+ * See https://github.com/flutter/flutter-intellij/issues/7103
+ */
 public class OpenInAndroidStudioAction extends AnAction {
   private static final String LABEL_FILE = FlutterBundle.message("flutter.androidstudio.open.file.text");
   private static final String DESCR_FILE = FlutterBundle.message("flutter.androidstudio.open.file.description");
@@ -46,6 +48,11 @@ public class OpenInAndroidStudioAction extends AnAction {
   @Override
   public void update(@NotNull AnActionEvent event) {
     updatePresentation(event, event.getPresentation());
+  }
+
+  @Override
+  public @NotNull ActionUpdateThread getActionUpdateThread() {
+    return ActionUpdateThread.BGT;
   }
 
   @Override
@@ -101,8 +108,14 @@ public class OpenInAndroidStudioAction extends AnAction {
 
   @Nullable
   private static Editor getCurrentEditor(@NotNull Project project, @Nullable VirtualFile file) {
-    if (file == null) return null;
-    final FileEditor fileEditor = FileEditorManager.getInstance(project).getSelectedEditor(file);
+    if (file == null) {
+      return null;
+    }
+    final FileEditorManager fileEditorManager = FileEditorManager.getInstance(project);
+    if(fileEditorManager == null) {
+      return null;
+    }
+    final FileEditor fileEditor = fileEditorManager.getSelectedEditor(file);
     if (fileEditor instanceof TextEditor) {
       final TextEditor textEditor = (TextEditor)fileEditor;
       final Editor editor = textEditor.getEditor();
